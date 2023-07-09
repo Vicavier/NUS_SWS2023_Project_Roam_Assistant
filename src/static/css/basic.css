@@ -1,0 +1,83 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+a{
+    text-decoration: none;
+}
+a:hover{
+    text-decoration: underline;
+}
+
+@font-face {
+    font-family: google-belanosima;
+    src: url("@/static/fonts/Belanosima-Regular.ttf");
+}
+.font-belanosima {font-family: google-belanosima,sans-serif;}
+
+/* display */
+.display-table-cell{display:table-cell !important}
+.display-table {display:table !important; border-spacing: 5px 5px;}
+.display-none {display:none !important}
+.display-block{display: block !important;}
+.display-inline-block {display: inline-block !important;}
+.display-flex {display: flex!important;}
+
+/* width */
+.width-40px {width: 40px;}
+.width-60px {width: 60px;}
+.width-80px {width: 80px;}
+.width-100px {width: 100px;}
+.width-200px {width: 200px;}
+.width-300px {width: 300px;}
+
+.width-80 {width: 80%}
+/* height */
+.height-40px {height:40px;}
+.height-50px {height:50px;}
+.height-100px {height:100px;}
+.height-200px {height:200px;}
+.height-300px {height:300px;}
+
+/* margin */
+.margin-left-10px {margin-left: 10px;}
+.margin-left-20px {margin-left: 20px;}
+
+/* center */
+.text-center{text-align: center;}
+.box-center {margin: 0 auto;}
+.vertical-center{
+    height: 100%;
+    vertical-align: middle;
+}
+/* color */
+.color-apple-wight {color: rgb(239, 239, 239);}
+.color-black {color: rgb(0,0,0);}
+
+/* background color */
+.bg-wight {background-color: rgb(255,255,255);}
+.bg-blue {background-color: rgb(151, 190, 243);}
+/* font size */
+.text-extra-small {font-size:5px; line-height:6px}
+.text-small {font-size:12px; line-height:20px}
+.text-medium {font-size:16px; line-height:23px}
+.text-large {font-size:18px; line-height:26px}
+.text-extra-large {font-size: 20px; line-height:26px}
+.title-large {font-size: 50px; line-height:45px}
+.title-extra-large {font-size: 72px; line-height:55px}
+
+/* font weight */
+.font-weight-300 {font-weight: 300;}
+.font-weight-500 {font-weight: 500;}
+.font-weight-700 {font-weight: 700;}
+
+/* border */
+.border-radius-20px {border-radius: 20px;}
+.border-radius-25px {border-radius: 25px;}
+
+/* overflow */
+.hidden {overflow: hidden;}
+
+/* float */
+.float-left {float: left;}
