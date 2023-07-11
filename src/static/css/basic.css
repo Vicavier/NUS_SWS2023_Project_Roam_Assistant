@@ -16,6 +16,17 @@ a:hover{
 }
 .font-belanosima {font-family: google-belanosima,sans-serif;}
 
+.container {
+    background: #56CCF2; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #2F80ED, #56CCF2); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #2F80ED, #56CCF2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+}
+
 /* display */
 .display-table-cell{display:table-cell !important}
 .display-table {display:table !important; border-spacing: 5px 5px;}
@@ -44,6 +55,8 @@ a:hover{
 .margin-left-10px {margin-left: 10px;}
 .margin-left-20px {margin-left: 20px;}
 
+.margin-tb-5px {margin-top: 5px;margin-bottom: 5px;}
+.margin-tb-10px {margin-top: 10px;margin-bottom: 10px;}
 /* center */
 .text-center{text-align: center;}
 .box-center {margin: 0 auto;}

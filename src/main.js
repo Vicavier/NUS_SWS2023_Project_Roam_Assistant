@@ -7,7 +7,8 @@ import 'element-plus/dist/index.css'
 import router from './router'
 // -------------icons--------------
 import '@/static/icons/style.css'
-// -------------axios--------------
+// -------------axios-------------
+import '@/hooks/request.js'
 
 const app = createApp(App)
 app.use(ElementPlus).use(router)

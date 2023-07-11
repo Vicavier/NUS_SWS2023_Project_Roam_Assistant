@@ -6,11 +6,24 @@
           <h1 class="font-belanosima title-extra-large color-apple-wight text-center">Roam Assistant</h1>
           <h5 class="font-belanosima text-large color-apple-wight font-weight-300 text-center">Your personal AI travel
             planner</h5>
-          <div class="width-300px height-50px bg-wight box-center display-table border-radius-25px">
-            <input class="display-table-cell vertical-center text-medium font-belanosima margin-left-20px" placeholder="Where to go..." type="text"
-                   style="background:none;outline:none;border:none;"/>
-            <div id="submit" class="height-40px width-60px bg-blue border-radius-20px display-table-cell" @click="submit"><i class="icon-arrow-thick-right color-black vertical-center text-extra-large margin-left-10px"></i></div>
+          <div class="height-50px bg-wight box-center display-table border-radius-25px">
+            <input class="display-table-cell vertical-center text-medium font-belanosima margin-left-20px"
+                   placeholder="Where to go..." type="text" v-model="tourPlan.start_place"/>
           </div>
+          <div class="margin-tb-10px"></div>
+          <div class="height-50px bg-wight box-center display-table border-radius-25px">
+            <input class="display-table-cell vertical-center text-medium font-belanosima margin-left-20px"
+                   placeholder="Where to start..." type="text" v-model="tourPlan.destination"/>
+          </div>
+          <div class="margin-tb-10px"></div>
+          <div class="height-50px bg-wight box-center display-table border-radius-25px">
+            <input class="display-table-cell vertical-center text-small font-belanosima margin-left-20px" type="date"
+                   v-model="tourPlan.start_time"/>
+            <div id="submit" class="height-40px width-60px bg-blue border-radius-20px display-table-cell"
+                 @click="submit"><i
+                class="icon-airplane color-black vertical-center text-extra-large margin-left-10px"></i></div>
+          </div>
+
         </div>
         <div class="item">
           <div class="globe-total-container">
@@ -68,36 +81,58 @@
 
 <script>
 import {onMounted, reactive} from "vue";
-import axios from "axios";
 import {showEarth} from "@/hooks/earth";
+import router from "@/router";
+import Swal from "sweetalert2";
+import request from '@/hooks/request'
 
 export default {
   setup() {
-    let info = reactive({
-      user_name: "",
-      user_passwd: ""
-    })
     let tourPlan = reactive({
-      place: "",
-      start_time: "",
-      end_time: ""
+      start_place: "",
+      destination:"",
+      start_time: ""
     })
 
     function submit() {
-      axios({
-        method: 'POST',
-        url: 'http://localhost:9090/user/weather',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: JSON.stringify(info)
-      }).then(resp => {
-        if (resp.data.code === 200) {
-          console.log(resp.data)
-          alert("登录成功!")
-        } else
-          alert("登录失败!")
-      })
+      if(tourPlan.start_place && tourPlan.destination){
+        request({
+          url:'/chat/simpleChat',
+          method:'post',
+          params: {
+            start_place: tourPlan.start_place,
+            destination: tourPlan.destination,
+            start_time: tourPlan.start_time
+          },
+          transformRequest: [function (data) {
+            let str = '';
+            for (let key in data) {
+              str += encodeURIComponent(key) + '=' + encodeURIComponent(data[key]) + '&';
+            }
+            return str;
+          }]
+        }).then(resp => {
+          if (resp.data.code === 200) {
+            console.log(resp.data)
+            console.log(resp.data.data)
+            router.push('result')
+          } else
+            Swal.fire({
+              icon: 'error',
+              title: 'Wooops!',
+              text: 'Service Not Supported',
+              confirmButtonText: 'OK'
+            })
+        })
+      } else{
+        Swal.fire({
+          icon: 'question',
+          title: 'Uhhhh?',
+          text: 'Incomplete Info',
+          confirmButtonText: 'OK'
+        })
+      }
+
 
     }
 
@@ -127,17 +162,6 @@ export default {
   margin: 0 auto;
 }
 
-.container {
-  background: #56CCF2; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #2F80ED, #56CCF2); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #2F80ED, #56CCF2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-}
-
 .hidden {
   display: none;
 }
@@ -158,21 +182,28 @@ export default {
   width: 100%;
 }
 
-#submit:hover{
+#submit:hover {
   cursor: pointer;
-  background-color: rgb(77,136,231);
+  background-color: rgb(77, 136, 231);
   transition: all 0.3s ease-in-out;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
 }
-#submit:hover i{
+
+#submit:hover i {
   margin-left: 40px;
   transition: all 0.5s ease-in-out;
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
   -ms-transition: all 0.5s ease-in-out;
   -o-transition: all 0.5s ease-in-out;
+}
+
+input {
+  background: none !important;
+  outline: none !important;
+  border: none !important;
 }
 </style>
