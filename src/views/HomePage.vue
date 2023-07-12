@@ -85,8 +85,10 @@ import {showEarth} from "@/hooks/earth";
 import router from "@/router";
 import Swal from "sweetalert2";
 import request from '@/hooks/request'
+// import LoadingComponent from "@/components/LoadingComponent.vue";
 
 export default {
+  // components: {LoadingComponent},
   setup() {
     let tourPlan = reactive({
       start_place: "",
