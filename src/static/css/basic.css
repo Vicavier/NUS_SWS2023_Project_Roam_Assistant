@@ -5,9 +5,11 @@
 
 a{
     text-decoration: none;
+    color: mediumblue;
 }
 a:hover{
     text-decoration: underline;
+    cursor: pointer;
 }
 
 @font-face {
@@ -20,8 +22,8 @@ a:hover{
     background: #56CCF2; /* fallback for old browsers */
     background: -webkit-linear-gradient(to right, #2F80ED, #56CCF2); /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to right, #2F80ED, #56CCF2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    display: flex;
     align-items: center;
+    display: flex;
     justify-content: center;
     width: 100vw;
     height: 100vh;
@@ -44,6 +46,8 @@ a:hover{
 .width-300px {width: 300px;}
 
 .width-80 {width: 80%}
+.width-85 {width: 85%}
+.width-90 {width: 90%}
 /* height */
 .height-40px {height:40px;}
 .height-50px {height:50px;}
@@ -58,8 +62,13 @@ a:hover{
 .margin-top-100px {margin-top: 100px;}
 .margin-tb-5px {margin-top: 5px;margin-bottom: 5px;}
 .margin-tb-10px {margin-top: 10px;margin-bottom: 10px;}
+
+/* padding */
+.padding-tb-5px {padding-top:5px;padding-bottom: 5px}
+
 /* center */
 .text-center{text-align: center;}
+.text-left {text-align: left;}
 .box-center {margin: 0 auto;}
 .vertical-center{
     height: 100%;
