@@ -8,11 +8,13 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
     "axios": "^1.4.0",
     "core-js": "^3.8.3",
     "element-plus": "^2.3.7",
     "gsap": "^3.12.2",
     "sweetalert2": "^11.7.12",
+    "swiper": "^9.4.1",
     "three": "^0.154.0",
     "vue": "^3.2.13",
     "vue-draggable-next": "^2.2.1",
@@ -40,7 +42,7 @@
       "parser": "@babel/eslint-parser"
     },
     "rules": {
-      "no-mixed-spaces-and-tabs":0
+      "no-mixed-spaces-and-tabs": 0
     }
   },
   "browserslist": [
