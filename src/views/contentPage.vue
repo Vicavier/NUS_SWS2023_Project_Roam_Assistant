@@ -9,27 +9,6 @@
       </div>
     </div>
 
-    <!--自定义增加需求-->
-    <div id="special-requests" class="margin-lr-20px">
-      <h1 class="font-belanosima title-medium color-apple-wight text-center margin-bottom-20px">Roam Assistant</h1>
-      <div class="height-50px bg-wight box-center display-table border-radius-25px">
-        <input class="width-200px display-table-cell vertical-center text-medium font-belanosima margin-left-20px"
-               placeholder="Hi~ Any Special Requests?" type="text" @focus="showTips" v-model="request"/>
-        <div class="height-40px width-60px border-radius-20px display-table-cell"
-             @click="submit">
-          <i id="submit" class="icon-send color-black vertical-center text-extra-large margin-left-10px"/>
-        </div>
-      </div>
-      <div v-if="setTips">
-        <div id="tips" v-for="(tip,index) in tips" :key="index" @click="request=tip"
-             class="text-center bg-blue margin-tb-10px border-radius-20px"
-             style="box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;">
-          <p class="text-medium width-80 box-center font-belanosima">{{ tip }}</p>
-        </div>
-        <div id="hideButton" class="width-100 text-center" @click="hideTips"><i
-            class="icon-cheveron-up text-center text-large"/></div>
-      </div>
-    </div>
     <!-- 区域概况 -->
     <div id="information">
       <div class="card border-radius-20px">
@@ -40,7 +19,33 @@
         </div>
       </div>
     </div>
-    <Swiper class="swiper" :slides-per-view="1.5">
+
+    <!--自定义增加需求-->
+    <div id="special-requests">
+      <h1 class="font-belanosima title-medium color-apple-wight text-center margin-bottom-20px">Roam Assistant</h1>
+      <div class="height-50px bg-wight box-center display-table border-radius-25px">
+        <input class="width-200px display-table-cell vertical-center text-medium font-belanosima margin-left-20px"
+               placeholder="Hi~ Any Special Requests?" type="text" @focus="showTips" v-model="request"/>
+        <div class="height-40px width-60px border-radius-20px display-table-cell"
+             @click="submit">
+          <i id="submit" class="icon-send color-black vertical-center text-extra-large margin-left-10px"/>
+        </div>
+      </div>
+      <div v-if="setTips" class="width-300px box-center">
+        <div id="tips" v-for="(tip,index) in tips" :key="index" @click="request=tip"
+             class="text-center bg-blue margin-tb-10px border-radius-20px"
+             style="box-shadow: rgba(3, 102, 214, 0.3) 0 0 0 3px;">
+          <p class="text-medium width-80 box-center font-belanosima">{{ tip }}</p>
+        </div>
+        <div id="hideButton" class="width-100 text-center" @click="hideTips"><i
+            class="icon-cheveron-up text-center text-large"/></div>
+      </div>
+      <FlightTicket :Flight="Flight"></FlightTicket>
+    </div>
+
+
+
+    <Swiper class="swiper" :slides-per-view="1.2">
       <swiper-slide v-for="(element,index) in daily_plan_list" :key="index">
         <DailyPlan :formalized_plan="element" :index="index"></DailyPlan>
       </swiper-slide>
@@ -59,9 +64,11 @@ import {Swiper, SwiperSlide} from "swiper/vue";
 import 'swiper/swiper.css'
 import DailyPlan from "@/components/DailyPlan.vue";
 import router from "@/router";
+import FlightTicket from "@/components/FlightTicket.vue";
 
 export default {
   components: {
+    FlightTicket,
     DailyPlan,
     Swiper,
     SwiperSlide,
@@ -71,6 +78,19 @@ export default {
     let request = ref('')
     let setTips = ref(false)
     const tips = reactive(['Make it 3 days', 'Switch day1 and day2', '$1000 budget', 'I want to eat local special food'])
+    let Flight = reactive({
+      departure: 'Shanghai',
+      departure_airport: 'Kempegowda International',
+      destination: 'New',
+      dest_airport: 'Indira Gandhi International',
+      take_off_time: '6:20',
+      take_off_date: 'June 12',
+      land_time: '8:45',
+      land_date: 'June 12',
+      transfer: 'Beijing',
+      price: '$1000',
+      clazz: 'Economy',
+    })
     let plan_from_backEnd = ref("{\n" +
         "    \"Information\": {\n" +
         "        \"text\": \"Singapore is a vibrant island city-state situated in Southeast Asia. With a population of over 5.7 million people, it is known for its efficient governance, stunning skyline, multicultural diversity, and thriving economy.\"\n" +
@@ -211,7 +231,8 @@ export default {
       tips,
       daily_plan_list,
       information,
-      transportation
+      transportation,
+      Flight
     }
   },
 };
@@ -284,6 +305,11 @@ input {
   cursor: grab;
 }
 
+#special-requests{
+  margin:80px 10px 0 10px;
+  align-self: flex-start;
+}
+
 #tips:hover {
   cursor: pointer;
   background-color: #00a95c;
@@ -305,7 +331,7 @@ input {
   overflow: hidden;
   padding: 1rem;
   width: 200px;
-  margin-right: 20px;
+  margin-left: 20px;
   text-align: center;
   color: whitesmoke;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1), 0 2px 2px rgba(0, 0, 0, 0.1), 0 4px 4px rgba(0, 0, 0, 0.1), 0 8px 8px rgba(0, 0, 0, 0.1), 0 16px 16px rgba(0, 0, 0, 0.1);
