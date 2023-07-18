@@ -64,27 +64,13 @@ export default {
     formalized_plan: Object,
     index: Number
   },
-  setup(props) {
-    console.log("-------------")
-    console.log(props.formalized_plan['Morning'].text)
+  setup() {
     return {}
   },
 }
 </script>
 <style scoped>
 @import "@/static/css/basic.css";
-
-.flip-list-move {
-  transition: transform 0.5s;
-}
-
-.no-move {
-  transition: transform 0s;
-}
-
-.ghost {
-  opacity: 0.5;
-}
 
 
 .list-group-item, .list-group-item i {

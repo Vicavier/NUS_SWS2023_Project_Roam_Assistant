@@ -41,40 +41,52 @@
             class="icon-cheveron-up text-center text-large"/></div>
       </div>
       <FlightTicket :Flight="Flight"></FlightTicket>
+      <WeatherInfo></WeatherInfo>
     </div>
-
 
 
     <Swiper class="swiper" :slides-per-view="1.2">
       <swiper-slide v-for="(element,index) in daily_plan_list" :key="index">
         <DailyPlan :formalized_plan="element" :index="index"></DailyPlan>
       </swiper-slide>
+      <swiper-slide>
+        <AdditionalInfo :additional_info="additional_info"></AdditionalInfo>
+      </swiper-slide>
+      <swiper-slide>
+        <div></div>
+      </swiper-slide>
     </Swiper>
-    <PageEntry></PageEntry>
+<!--    <PageEntry></PageEntry>-->
 
   </div>
 
 </template>
 
 <script>
-import {reactive, ref} from "vue";
+import {reactive,ref} from "vue";
 import {processData} from "@/hooks/processData";
-import PageEntry from "@/components/PageEntry.vue";
+// import PageEntry from "@/components/PageEntry.vue";
+import AdditionalInfo from '@/components/AdditionalInfo.vue'
 import {Swiper, SwiperSlide} from "swiper/vue";
 import 'swiper/swiper.css'
 import DailyPlan from "@/components/DailyPlan.vue";
 import router from "@/router";
 import FlightTicket from "@/components/FlightTicket.vue";
+import WeatherInfo from "@/components/WeatherInfo.vue";
+
 
 export default {
   components: {
+    WeatherInfo,
     FlightTicket,
     DailyPlan,
     Swiper,
     SwiperSlide,
-    PageEntry,
+    AdditionalInfo,
+    // PageEntry,
   },
-  setup() {
+  props:['departure','plan'],
+  setup(props) {
     let request = ref('')
     let setTips = ref(false)
     const tips = reactive(['Make it 3 days', 'Switch day1 and day2', '$1000 budget', 'I want to eat local special food'])
@@ -91,122 +103,12 @@ export default {
       price: '$1000',
       clazz: 'Economy',
     })
-    let plan_from_backEnd = ref("{\n" +
-        "    \"Information\": {\n" +
-        "        \"text\": \"Singapore is a vibrant island city-state situated in Southeast Asia. With a population of over 5.7 million people, it is known for its efficient governance, stunning skyline, multicultural diversity, and thriving economy.\"\n" +
-        "    },\n" +
-        "    \"Transportation\": {\n" +
-        "        \"Flight\": \"You can book flight ticket from Shanghai to Singapore in here [https://www.kayak.sg/flights/SHA-SIN/2023-08-11/2023-08-18?sort=bestflight_a]\",\n" +
-        "        \"Train\": \"No train from Shanghai to Singapore.\"\n" +
-        "    },\n" +
-        "    \"TravelPlan\": [\n" +
-        "        {\n" +
-        "            \"Morning\": {\n" +
-        "                       \"text\": \"Start your day with a visit to the iconic Merlion Park, where you can see the famous Merlion statue, a mythical creature with the head of a lion and the body of a fish. Enjoy panoramic views of the city skyline and Marina Bay from this picturesque location.\",\n" +
-        "                       \"link\": \"\",\n" +
-        "                       \"picture\": \"\"\n" +
-        "                                        },\n" +
-        "            \"Lunch_Recommendation\": {\n" +
-        "                       \"text\": \"You can have lunch in 'Jypsy at One Fullerton' near Merlion Park.\",\n" +
-        "                       \"link\": \"https://www.pscafe.com/jypsy-one-fullerton\",\n" +
-        "                       \"picture\": \"https://images.squarespace-cdn.com/content/v1/5326c064e4b011eeaa057a38/1649034099621-OGD8OD3IDRVLCSSNV0F6/DSC05047-4_web.jpg?format=2500w\"\n" +
-        "                                        },\n" +
-        "            \"Afternoon\": {\n" +
-        "                       \"text\": \"Head to the Supertree Grove at Gardens by the Bay, a futuristic park with towering tree-like structures. Explore the various gardens and attractions, such as the Flower Dome and Cloud Forest, and admire the stunning views of the city from the OCBC Skyway.\",\n" +
-        "                       \"link\": \"\",\n" +
-        "                       \"picture\": \"\"\n" +
-        "                                        },\n" +
-        "            \"Dinner_Recommendation\": {\n" +
-        "                       \"text\": \"You can have dinner at 'Marina Bay BBQ Steamboat Buffet' inside Garden by the Bay.\",\n" +
-        "                       \"link\": \"https://www.facebook.com/marinabaysteamboat/\",\n" +
-        "                       \"picture\": \"https://scontent-xsp1-1.xx.fbcdn.net/v/t39.30808-6/300434902_395304186059614_5596346321229426667_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=e3f864&_nc_ohc=O8qbgfw-5dkAX-Crsc9&_nc_ht=scontent-xsp1-1.xx&oh=00_AfC427x1r4eOWoAC55OtVdWGj_xJjSDToN7LvgXUgpnDRg&oe=64B59718\"\n" +
-        "                                        },\n" +
-        "            \"Evening\": {\n" +
-        "                       \"text\": \"Take a leisurely stroll along the Singapore River and enjoy the vibrant atmosphere of Clarke Quay. Indulge in a delicious dinner at one of the riverside restaurants and take a river cruise to see the cityscape illuminated at night.\",\n" +
-        "                       \"link\": \"\",\n" +
-        "                       \"picture\": \"\"\n" +
-        "                                        },\n" +
-        "            \"Bedtime\": {\n" +
-        "                       \"text\": \"You can find amazing hotels here.\",\n" +
-        "                       \"link\": \"https://www.kayak.sg/hotels/Singapore/2023-07-12/2023-07-16?sort=rank_a\",\n" +
-        "                       \"picture\": \"\"\n" +
-        "                                        }\n" +
-        "        },\n" +
-        "        {\n" +
-        "            \"Morning\": {\n" +
-        "                       \"text\": \"Start your day with a visit to the iconic Merlion Park, where you can see the famous Merlion statue, a mythical creature with the head of a lion and the body of a fish. Enjoy panoramic views of the city skyline and Marina Bay from this picturesque location.\",\n" +
-        "                       \"link\": \"\",\n" +
-        "                       \"picture\": \"\"\n" +
-        "                                        },\n" +
-        "            \"Lunch_Recommendation\": {\n" +
-        "                       \"text\": \"You can have lunch in 'Jypsy at One Fullerton' near Merlion Park.\",\n" +
-        "                       \"link\": \"https://www.pscafe.com/jypsy-one-fullerton\",\n" +
-        "                       \"picture\": \"https://images.squarespace-cdn.com/content/v1/5326c064e4b011eeaa057a38/1649034099621-OGD8OD3IDRVLCSSNV0F6/DSC05047-4_web.jpg?format=2500w\"\n" +
-        "                                        },\n" +
-        "            \"Afternoon\": {\n" +
-        "                       \"text\": \"Head to the Supertree Grove at Gardens by the Bay, a futuristic park with towering tree-like structures. Explore the various gardens and attractions, such as the Flower Dome and Cloud Forest, and admire the stunning views of the city from the OCBC Skyway.\",\n" +
-        "                       \"link\": \"\",\n" +
-        "                       \"picture\": \"\"\n" +
-        "                                        },\n" +
-        "            \"Dinner_Recommendation\": {\n" +
-        "                       \"text\": \"You can have dinner at 'Marina Bay BBQ Steamboat Buffet' inside Garden by the Bay.\",\n" +
-        "                       \"link\": \"https://www.facebook.com/marinabaysteamboat/\",\n" +
-        "                       \"picture\": \"https://scontent-xsp1-1.xx.fbcdn.net/v/t39.30808-6/300434902_395304186059614_5596346321229426667_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=e3f864&_nc_ohc=O8qbgfw-5dkAX-Crsc9&_nc_ht=scontent-xsp1-1.xx&oh=00_AfC427x1r4eOWoAC55OtVdWGj_xJjSDToN7LvgXUgpnDRg&oe=64B59718\"\n" +
-        "                                        },\n" +
-        "            \"Evening\": {\n" +
-        "                       \"text\": \"Take a leisurely stroll along the Singapore River and enjoy the vibrant atmosphere of Clarke Quay. Indulge in a delicious dinner at one of the riverside restaurants and take a river cruise to see the cityscape illuminated at night.\",\n" +
-        "                       \"link\": \"\",\n" +
-        "                       \"picture\": \"\"\n" +
-        "                                        },\n" +
-        "            \"Bedtime\": {\n" +
-        "                       \"text\": \"You can find amazing hotels here.\",\n" +
-        "                       \"link\": \"https://www.kayak.sg/hotels/Singapore/2023-07-12/2023-07-16?sort=rank_a\",\n" +
-        "                       \"picture\": \"\"\n" +
-        "                                        }\n" +
-        "        },\n" +
-        "        {\n" +
-        "            \"Morning\": {\n" +
-        "                       \"text\": \"Start your day with a visit to the iconic Merlion Park, where you can see the famous Merlion statue, a mythical creature with the head of a lion and the body of a fish. Enjoy panoramic views of the city skyline and Marina Bay from this picturesque location.\",\n" +
-        "                       \"link\": \"\",\n" +
-        "                       \"picture\": \"\"\n" +
-        "                                        },\n" +
-        "            \"Lunch_Recommendation\": {\n" +
-        "                       \"text\": \"You can have lunch in 'Jypsy at One Fullerton' near Merlion Park.\",\n" +
-        "                       \"link\": \"https://www.pscafe.com/jypsy-one-fullerton\",\n" +
-        "                       \"picture\": \"https://images.squarespace-cdn.com/content/v1/5326c064e4b011eeaa057a38/1649034099621-OGD8OD3IDRVLCSSNV0F6/DSC05047-4_web.jpg?format=2500w\"\n" +
-        "                                        },\n" +
-        "            \"Afternoon\": {\n" +
-        "                       \"text\": \"Head to the Supertree Grove at Gardens by the Bay, a futuristic park with towering tree-like structures. Explore the various gardens and attractions, such as the Flower Dome and Cloud Forest, and admire the stunning views of the city from the OCBC Skyway.\",\n" +
-        "                       \"link\": \"\",\n" +
-        "                       \"picture\": \"\"\n" +
-        "                                        },\n" +
-        "            \"Dinner_Recommendation\": {\n" +
-        "                       \"text\": \"You can have dinner at 'Marina Bay BBQ Steamboat Buffet' inside Garden by the Bay.\",\n" +
-        "                       \"link\": \"https://www.facebook.com/marinabaysteamboat/\",\n" +
-        "                       \"picture\": \"https://scontent-xsp1-1.xx.fbcdn.net/v/t39.30808-6/300434902_395304186059614_5596346321229426667_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=e3f864&_nc_ohc=O8qbgfw-5dkAX-Crsc9&_nc_ht=scontent-xsp1-1.xx&oh=00_AfC427x1r4eOWoAC55OtVdWGj_xJjSDToN7LvgXUgpnDRg&oe=64B59718\"\n" +
-        "                                        },\n" +
-        "            \"Evening\": {\n" +
-        "                       \"text\": \"Take a leisurely stroll along the Singapore River and enjoy the vibrant atmosphere of Clarke Quay. Indulge in a delicious dinner at one of the riverside restaurants and take a river cruise to see the cityscape illuminated at night.\",\n" +
-        "                       \"link\": \"\",\n" +
-        "                       \"picture\": \"\"\n" +
-        "                                        },\n" +
-        "            \"Bedtime\": {\n" +
-        "                       \"text\": \"You can find amazing hotels here.\",\n" +
-        "                       \"link\": \"https://www.kayak.sg/hotels/Singapore/2023-07-12/2023-07-16?sort=rank_a\",\n" +
-        "                       \"picture\": \"\"\n" +
-        "                                        }\n" +
-        "        }\n" +
-        "    ],\n" +
-        "    \"Additional_Information\": {\n" +
-        "        \"Emergency Number\": \"The emergency number in Singapore is 995. This number should be dialed in case of a medical emergency or when an ambulance is needed. When you call 995, you will be connected to the Singapore Civil Defence Force (SCDF) Emergency Medical Services, and they will dispatch an ambulance to your location.\",\n" +
-        "        \"Police Number\": \"For other emergencies such as police assistance or fire-related emergencies, you can dial 999\",\n" +
-        "        \"Weather Condition\": \"summer in Singapore is characterized by occasional rain showers and thunderstorms. These rain showers can be heavy and brief, providing temporary relief from the heat. It's advisable to carry an umbrella or raincoat when exploring the city during the summer season.\"\n" +
-        "    }\n" +
-        "}")
     let daily_plan_list = reactive([]);
     let information = ref('');
-    let transportation = reactive([]);
-    processData(daily_plan_list, information, transportation, plan_from_backEnd.value)
+    let additional_info = reactive([])
+    processData(daily_plan_list, information, additional_info, props.plan)
+
+
 
     function toHomePage() {
       router.push("/")
@@ -231,7 +133,7 @@ export default {
       tips,
       daily_plan_list,
       information,
-      transportation,
+      additional_info,
       Flight
     }
   },
@@ -305,8 +207,8 @@ input {
   cursor: grab;
 }
 
-#special-requests{
-  margin:80px 10px 0 10px;
+#special-requests {
+  margin: 58px 10px 0 10px;
   align-self: flex-start;
 }
 

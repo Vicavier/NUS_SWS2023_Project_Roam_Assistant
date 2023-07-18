@@ -104,8 +104,7 @@
               <div id="third" :class="[active===true?'third-active':'third-inactive']">
                 <div id="thirdTop"/>
                 <div id="secondBehindBottom">
-                  <div id="button" @click="pay">
-                    Pay
+                  <div id="button" @click="pay">More
                   </div>
                 </div>
               </div>
@@ -213,7 +212,6 @@ export default {
 #cardContainer {
   position: relative;
   width: 340px;
-  height: 100px;
   /* background: rgb(194, 194, 194); */
   border-radius: 5px;
   transform-origin: bottom;

@@ -8,8 +8,13 @@ const routes = [
     },
     {
         path: '/result',
+        name: 'result',
         component: () => import('../views/contentPage.vue'),
-        meta:{ loadRequired: true }
+        meta:{ loadRequired: true },
+        props:(route) => ({
+            departure : route.query.departure,
+            plan: route.query.plan
+        })
     }
 ]
 
