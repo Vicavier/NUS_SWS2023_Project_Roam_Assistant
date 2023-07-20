@@ -8,12 +8,12 @@
             planner</h5>
           <div class="height-50px bg-wight box-center display-table border-radius-25px">
             <input class="display-table-cell vertical-center text-medium font-belanosima margin-left-20px"
-                   placeholder="Where to go..." type="text" v-model="tourPlan.departure"/>
+                   placeholder="Where to go..." type="text" v-model="tourPlan.destination"/>
           </div>
           <div class="margin-tb-10px"></div>
           <div class="height-50px bg-wight box-center display-table border-radius-25px">
             <input class="display-table-cell vertical-center text-medium font-belanosima margin-left-20px"
-                   placeholder="Where to start..." type="text" v-model="tourPlan.destination"/>
+                   placeholder="Where to start..." type="text" v-model="tourPlan.departure"/>
           </div>
           <div class="margin-tb-10px"></div>
           <div class="height-50px bg-wight box-center display-table border-radius-25px">
@@ -114,7 +114,7 @@ export default {
             return str;
           }]
         }).then(resp => {
-          console.log(resp)
+          console.log(resp.data.data)
           localStorage.setItem('departure',tourPlan.departure)
           localStorage.setItem('destination',tourPlan.destination)
           localStorage.setItem('startTime',tourPlan.start_time)

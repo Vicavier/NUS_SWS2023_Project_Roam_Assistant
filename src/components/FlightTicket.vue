@@ -4,8 +4,8 @@
       <div id="firstDisplay">
         <div id="flightDetail">
           <div id="detailLabel" style="font-weight:bold; color: rgb(13, 28, 83)">From</div>
-          {{$props.Flight.departure}}
-          <div id="detailLabel">{{ $props.Flight.departure_airport }}</div>
+          {{flight.departure}}
+          <div id="detailLabel">{{ flight.departure_airport }}</div>
         </div>
         <div id="flightDetail" style="margin-top:15px">
           <div id="animContainer">
@@ -29,8 +29,8 @@
         </div>
         <div id="flightDetail">
           <div id="detailLabel" style="font-weight:bold; color: rgb(13, 28, 83)">To</div>
-          {{$props.Flight.destination}}
-          <div id="detailLabel">{{$props.Flight.dest_airport}}</div>
+          {{flight.destination}}
+          <div id="detailLabel">{{flight.dest_airport}}</div>
         </div>
       </div>
       <div id="first" :class="[active ?'first-active':'first-inactive']">
@@ -38,16 +38,16 @@
           <img style="height: 51px;margin:22px 12px" src="../static/images/Lufthansa-Logo.webp"/>
           <div id="timecontainer">
             <div id="detailDate">
-              {{ $props.Flight.departure }}
-              <div id="detailTime">{{$props.Flight.take_off_time}}</div>
-              {{ $props.Flight.take_off_date }}
+              {{ flight.departure }}
+              <div id="detailTime">{{flight.take_off_time}}</div>
+              {{ flight.take_off_date }}
             </div>
             <img style="width:30px;height: 26px; margin-top: 22px; margin-left: 16px; margin-right: 16px"
                  src="../static/images/flight.png"/>
             <div id="detailDate">
-              {{ $props.Flight.destination }}
-              <div id="detailTime">{{$props.Flight.land_time}}</div>
-              {{$props.Flight.land_date}}
+              {{ flight.destination }}
+              <div id="detailTime">{{ flight.land_time}}</div>
+              {{ flight.land_date}}
             </div>
           </div>
         </div>
@@ -55,17 +55,17 @@
           <div id="firstBehindDisplay">
             <div id="firstBehindRow">
               <div id="detail">
-                {{$props.Flight.take_off_time}} - {{$props.Flight.land_time}}
+                {{flight.take_off_time}} - {{ flight.land_time}}
                 <div id="detailLabel">Flight Time</div>
               </div>
               <div id="detail">
-                {{ $props.Flight.transfer}}
+                {{ flight.transfer}}
                 <div id="detailLabel">Transfer</div>
               </div>
             </div>
             <div id="firstBehindRow">
               <div id="detail">
-                2h 25 min
+                {{ flight.duration[0] }} h {{flight.duration[1]}} m
                 <div id="detailLabel">Duration</div>
               </div>
               <div id="detail">
@@ -116,7 +116,8 @@
   </div>
 </template>
 <script>
-import {ref} from "vue";
+import {reactive, ref} from "vue";
+import axios from "axios";
 
 export default {
   props:{
@@ -135,14 +136,60 @@ export default {
     }
   },
   setup() {
-
+    const departure = localStorage.getItem('departure')
+    const destination = localStorage.getItem('destination')
+    const start_time = localStorage.getItem('startTime')
     let active = ref(false)
-
+    let flight = reactive({
+      departure: '',
+      departure_airport: '',
+      destination: null,
+      dest_airport: '',
+      take_off_time: '',
+      take_off_date: '',
+      land_time: '',
+      land_date: '',
+      duration:'',
+      transfer: '\\',
+      price: '\\',
+      clazz: 'Economic',
+    })
+    axios({
+      method: 'GET',
+      url: 'http://172.25.100.193:5000/flights/departure='+departure+'&destination='+destination+'&'+start_time,
+    }).then(resp=>{
+      let index = Math.random() * resp.data.length | 0
+      let f = resp.data[index]
+      console.log(f)
+      flight.departure = f.departure
+      flight.departure_airport = f.departure_airport
+      flight.destination = f.destination
+      flight.dest_airport = f.destination_airport
+      flight.take_off_date = f.take_off_date
+      flight.take_off_time = f.take_off_time
+      flight.land_date = f.take_off_date
+      flight.land_time = f.land_time
+      flight.duration = getDuration(f.land_time, f.take_off_time)
+    })
     function handleActive(a){
       active.value = a
     }
+
+    function getDuration(land, takeOff){
+      let l = land.split(":")
+      let t = takeOff.split(":")
+      let hour = l[0] - t[0]
+      let minute = l[1] - t[1]
+      if (minute < 0){
+        hour -= 1
+        minute += 60
+      }
+      return [hour,minute]
+    }
+
     return {
       active,
+      flight,
       handleActive
     }
   }

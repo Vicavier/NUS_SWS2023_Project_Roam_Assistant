@@ -5,28 +5,38 @@
     </div>
     <ul class="days">
       <li>
-        <div class="today">20 <span class="degree">&#8451;</span>					</div>
-        <div class="icons sunny"></div>
+        <div class="today">{{weatherList[0].temp}} <span class="degree">&#8451;</span>					</div>
+        <div :class="{'icons sunny':weatherList[0].weather === 'Sunny',
+        'icons rainy':weatherList[0].weather==='Rain',
+        'icons cloudy':weatherList[0].weather==='Clouds'}"></div>
       </li>
       <li>
         <span class="day-name">Tue</span>
-        <div class="tempeture">9 <span class="degree">&#8451;</span>			</div>
-        <div class="icons rainy"></div>
+        <div class="tempeture">{{weatherList[1].temp}}<span class="degree">&#8451;</span>			</div>
+        <div :class="{'icons sunny':weatherList[1].weather === 'Sunny',
+        'icons rainy':weatherList[1].weather==='Rain',
+        'icons cloudy':weatherList[1].weather==='Clouds'}"></div>
       </li>
       <li>
         <span class="day-name">Wed</span>
-        <div class="tempeture">15 <span class="degree">&#8451;</span>				</div>
-        <div class="icons cloudy"></div>
+        <div class="tempeture">{{weatherList[2].temp}} <span class="degree">&#8451;</span>				</div>
+        <div :class="{'icons sunny':weatherList[2].weather === 'Sunny',
+        'icons rainy':weatherList[2].weather==='Rain',
+        'icons cloudy':weatherList[2].weather==='Clouds'}"></div>
       </li>
       <li>
         <span class="day-name">Tue</span>
-        <div class="tempeture">3 <span class="degree">&#8451;</span>				</div>
-        <div class="icons snowy"></div>
+        <div class="tempeture">{{ weatherList[3].temp}} <span class="degree">&#8451;</span>				</div>
+        <div :class="{'icons sunny':weatherList[3].weather === 'Sunny',
+        'icons rainy':weatherList[3].weather==='Rain',
+        'icons cloudy':weatherList[3].weather==='Clouds'}"></div>
       </li>
       <li>
         <span class="day-name">Fri</span>
-        <div class="tempeture">18 <span class="degree">&#8451;</span>					</div>
-        <div class="icons sunny"></div>
+        <div class="tempeture">{{ weatherList[4].temp }} <span class="degree">&#8451;</span>					</div>
+        <div :class="{'icons sunny':weatherList[4].weather === 'Sunny',
+        'icons rainy':weatherList[4].weather==='Rain',
+        'icons cloudy':weatherList[4].weather==='Clouds'}"></div>
       </li>
     </ul>
   </div>
@@ -46,7 +56,31 @@ export default {
       lng:''
     })
 
-    // geocoding()
+    let weatherList = reactive([
+      {
+        temp:'',
+        weather:''
+      },
+      {
+        temp:'',
+        weather:''
+      },
+      {
+        temp:'',
+        weather:''
+      },
+      {
+        temp:'',
+        weather:''
+      },
+      {
+        temp:'',
+        weather:''
+      },
+    ])
+    geocoding()
+    // console.log(weatherList)
+
     function geocoding() {
       axios({
         method: 'GET',
@@ -55,24 +89,33 @@ export default {
         console.log(resp.data.results[0].geometry.location.lat)
         location.lat += resp.data.results[0].geometry.location.lat
         location.lng += resp.data.results[0].geometry.location.lng
-        console.log(location)
         getWeather()
       })
     }
 
     function getWeather(){
-      let url = 'https://api.openweathermap.org/data/2.5/forecast?cnt=6&lat='+location.lat+'&lon='+location.lng+'&appid='+apis.openWeather
+      let url = 'https://api.openweathermap.org/data/2.5/forecast?units=metric&lat='+location.lat+'&lon='+location.lng+'&appid='+apis.openWeather
       console.log(url)
       axios({
         method: 'GET',
         url: url,
       }).then(resp => {
-        console.log(resp.data.list)
+        // index: 1, 9, 17, 25, 33
+        weatherList[0].temp = resp.data.list[1].main.temp | 0
+        weatherList[0].weather = resp.data.list[1].weather[0].main
+        weatherList[1].temp = resp.data.list[9].main.temp | 0
+        weatherList[1].weather = resp.data.list[9].weather[0].main
+        weatherList[2].temp = resp.data.list[17].main.temp | 0
+        weatherList[2].weather = resp.data.list[17].weather[0].main
+        weatherList[3].temp = resp.data.list[25].main.temp | 0
+        weatherList[3].weather = resp.data.list[25].weather[0].main
+        weatherList[4].temp = resp.data.list[33].main.temp | 0
+        weatherList[4].weather = resp.data.list[33].weather[0].main
       })
     }
     return{
       destination,
-      geocoding
+      weatherList,
     }
   }
 }
