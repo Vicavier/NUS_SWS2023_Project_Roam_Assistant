@@ -11,6 +11,12 @@ Team members:
 > + Communication between Springboot and Flask.
 > + ...
 
+## Poster Presentation
+![poster](./SWS3004_02.png)
+
+## Backend
+see: https://github.com/Vicavier/Roam-Assistant-BackEnd
+
 ## Project setup
 ```
 npm install
